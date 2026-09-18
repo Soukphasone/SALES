@@ -1,0 +1,11 @@
+export default {
+  welcome: 'Hello, welcome to our app!',
+  changeLanguage: 'Change Language',
+  languages: { en: 'English', la: 'Lao' },
+  all: 'All',
+  land: 'Land',
+  car: 'Car',
+  viewDetails: 'View Details',
+  kip: '₭',
+  salesOldcar: 'Sales Old Car',
+}
