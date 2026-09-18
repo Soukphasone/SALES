@@ -1,26 +1,22 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from '@/views/Dashboard/Dashboard.vue'
 import AdminManager from '@/components/Admin/AdminManager.vue'
-
 const routes = [
+  {
+    path: '/',
+    redirect: '/all'
+  },
   {
     path: '/:type(car|land|all)',
     name: 'TypePage',
-    component: Dashboard,
-    meta: {
-      title: 'Sales Dashboard'
-    }
+    component: Dashboard
   },
   {
     path: '/admin',
     name: 'admin',
-    component: AdminManager,
-    meta: {
-      title: 'Admin'
-    }
+    component: AdminManager
   }
 ]
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
