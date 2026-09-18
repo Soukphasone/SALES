@@ -4,6 +4,7 @@ import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 
 export default defineConfig({
+  base: '/', // 👈 สำคัญมาก: กำหนดเป็น Root Path สำหรับ Custom Domain
   plugins: [
     vue(),
     vueJsx(),
@@ -14,8 +15,8 @@ export default defineConfig({
     }
   },
   server: {
-    host: true, // 0.0.0.0      // allow access from network (important if using WiFi/LAN)
-    port: 3003,      // 👉 change to your port (e.g. 8002, 5173, etc.)
-    strictPort: true // optional: fail if port is already in use
+    host: true,
+    port: 3003,
+    strictPort: true
   }
 })
