@@ -2,9 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="/assets/sale-Crun_-qZ.png">
+    <!-- 1. เปลี่ยน Path ของ Favicon ให้เป็น Absolute Path หรือนำไว้ในโฟลเดอร์ public/ -->
+    <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bo Sales</title>
+
+    <!-- 2. SPA Single Page Apps hack for GitHub Pages -->
+    <script type="text/javascript">
+      (function(l) {
+        if (l.search[1] === '/' ) {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location));
+    </script>
     <script type="module" crossorigin src="/assets/index-aIKuWiBk.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-aiH4Uh7D.css">
   </head>
