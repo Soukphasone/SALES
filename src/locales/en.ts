@@ -8,4 +8,8 @@ export default {
   viewDetails: 'View Details',
   kip: '₭',
   salesOldcar: 'Sales Old Car',
+  price: 'Price',
+  contact: 'Contact',
+  description: 'Description',
+  back: 'Back',
 }

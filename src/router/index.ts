@@ -1,26 +1,25 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Dashboard from '@/views/Dashboard/Dashboard.vue'
-import AdminManager from '@/components/Admin/AdminManager.vue'
 const routes = [
   {
     path: '/',
-    redirect: '/all' // 👈 เพิ่มบรรทัดนี้เพื่อให้วิ่งไปที่ /all อัตโนมัติ
+    redirect: '/all'
   },
   {
     path: '/:type(car|land|all)',
     name: 'TypePage',
-    component: Dashboard,
+    component: () => import('@/views/Dashboard/Dashboard.vue'),
     meta: { title: 'Sales Dashboard' }
   },
   {
     path: '/admin',
     name: 'admin',
-    component: AdminManager,
+    component: () => import('@/components/Admin/AdminManager.vue'),
     meta: { title: 'Admin' }
   },
   {
+    // ถ้าพิมพ์ URL ผิดให้ Redirect กลับไปที่ /all ป้องกันหน้าขาว
     path: '/:pathMatch(.*)*',
-    redirect: '/all' // 👈 Redirect route ที่ไม่มีอยู่จริงกลับไป /all
+    redirect: '/all'
   }
 ]
 const router = createRouter({

@@ -10,5 +10,9 @@ export default {
   car: 'ລົດ',
   viewDetails: 'ເບິ່ງລາຍລະອຽດ',
   kip: 'ກີບ',
-  salesOldcar: 'ຂາຍລົດມື 2 '
+  salesOldcar: 'ຂາຍລົດມື 2 ',
+  price: 'ລາຄາ',
+  contact: 'ຕິດຕໍ່',
+  description: 'ລາຍລະອຽດ',
+  back: 'ກັບຄືນ',
 }

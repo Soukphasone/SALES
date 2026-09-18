@@ -167,21 +167,23 @@ onMounted(() => {
           class="w-full h-48 object-cover bg-gray-100"
         />
         <div class="p-4">
-          <h2 class="text-xl font-semibold mt-2">{{ item.title }}</h2>
+          <h2 class="text-xl font-semibold mt-2 text-gray-800">{{ item.title }}</h2>
 
-          <p v-if="item.cars" class="text-gray-500 text-sm">
+          <p v-if="item.cars" class="text-gray-700 text-sm">
             {{ `${item.cars.make || ''} ${item.cars.model || ''} ${item.cars.year || ''}` }}
           </p>
           <p v-if="item.lands" class="text-gray-500 text-sm">
-            {{ `${item.lands.village || ''}, ${item.lands.district || ''}, ${item.lands.province || ''}` }}
+            {{
+              `${item.lands.village || ''}, ${item.lands.district || ''}, ${item.lands.province || ''}`
+            }}
           </p>
 
-          <p class="text-gray-400 text-sm flex items-center gap-1 mt-1">
+          <p class="text-gray-600 text-sm flex items-center gap-1 mt-1">
             👁️ {{ item.views || 0 }} views
           </p>
 
           <div class="flex justify-between items-center mt-4">
-            <span class="text-2xl font-bold text-slate-900">
+            <span class="text-md sm:text-2xl font-bold text-slate-900">
               {{ formatNumber(item.price) }} {{ item.currency }}
             </span>
 

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { IconFullscreen } from '@/util/icons'
+import { formatNumber } from '@/services/service/Format'
+
 const props = defineProps<{
   isOpen: boolean
   item: any
@@ -131,15 +133,25 @@ onUnmounted(() => {
           class="bg-gray-50 sm:rounded-2xl max-w-5xl w-full sm:max-h-[90vh] overflow-y-auto shadow-2xl relative flex flex-col my-auto"
         >
           <!-- Header -->
-          <div
-            class="sticky top-0 z-20 bg-white px-6 py-4 border-b flex items-center justify-between"
-          >
-            <h2 class="text-xl font-bold text-gray-800 truncate pr-4">{{ item.title }}</h2>
+          <div class="sticky top-0 z-20 bg-white px-6 py-4 border-b flex justify-start">
             <button
               @click="closeModal"
-              class="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors"
+              class="flex gap-2 items-center text-gray-700 hover:text-gray-800 transition-colors"
             >
-              ✕
+              <svg
+                class="w-5 h-5 stroke-current"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+                />
+              </svg>
+              <span>{{ $t('back') }}</span>
             </button>
           </div>
 
@@ -237,15 +249,19 @@ onUnmounted(() => {
 
                 <!-- Information Section -->
                 <section class="bg-white p-6 rounded-2xl shadow-sm border">
-                  <h1 class="text-2xl font-bold text-gray-900">{{ item.title }}</h1>
+                  <h1 class="text-xl font-bold text-gray-900">{{ item.title }}</h1>
                   <p v-if="item.lands" class="text-gray-500 mt-1 flex items-center">
-                    <span class="mr-2">📍</span> {{ item.lands.village + ', ' + item.lands.district + ', ' + item.lands.province }}
+                    <span class="mr-2">📍</span>
+                    {{
+                      item.lands.village + ', ' + item.lands.district + ', ' + item.lands.province
+                    }}
                   </p>
-                  <p v-if="item.cars" class="text-gray-500 mt-1 flex items-center">
-                    <span class="mr-2">🚗</span> {{ item.cars.make + ' ' + item.cars.model + ' ' + item.cars.year }}
+                  <p v-if="item.cars" class="text-gray-600 mt-1 flex items-center">
+                    <span class="mr-2">🚗</span>
+                    {{ item.cars.make + ' ' + item.cars.model + ' ' + item.cars.year }}
                   </p>
                   <hr class="my-4 border-gray-100" />
-                  <h3 class="text-lg font-semibold mb-2">Description</h3>
+                  <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ $t('description') }}</h3>
                   <p class="text-gray-600 leading-relaxed">{{ item.description }}</p>
 
                   <div v-if="item.specs && item.specs.length" class="mt-6">
@@ -270,14 +286,14 @@ onUnmounted(() => {
               <div class="lg:col-span-1">
                 <div class="space-y-4">
                   <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <p class="text-xs text-gray-500 uppercase font-semibold tracking-wider">
-                      Price
+                    <p class="text-lg text-gray-800 uppercase font-semibold tracking-wider">
+                      {{ $t('price') }}
                     </p>
-                    <div class="text-3xl font-extrabold text-gray-900 mb-6">
-                      {{ formatPrice(item.price) }} 
+                    <div class="text-xl font-extrabold text-gray-900 mb-6">
+                      {{ formatNumber(item.price) }} {{ item.currency }}
                     </div>
-                    <p class="text-xs text-gray-500 uppercase font-semibold tracking-wider">
-                      Contact
+                    <p class="text-lg text-gray-800 uppercase font-semibold tracking-wider">
+                      {{ $t('contact') }}
                     </p>
                     <a
                       href="https://wa.me/8562099110019"
