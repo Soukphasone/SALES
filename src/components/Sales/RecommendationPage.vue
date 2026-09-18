@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
-import type { Listing } from '@/types/listings'
 import { useRoute } from 'vue-router'
 import changeLanguage from '@/components/LanguageSwitcher/LanguageSwitcher.vue'
 import { useI18n } from 'vue-i18n'
@@ -12,7 +11,7 @@ const { t } = useI18n()
 const route = useRoute()
 const type = route.params.type as string
 console.log('Path Name', type)
-const items = ref<Listing[]>([])
+const items = ref<any[]>([])
 const serverUrl = import.meta.env.VITE_APP_SERVER
 const filter = ref<'all' | 'land' | 'car'>((type as 'all' | 'land' | 'car') || 'all')
 const { showHeader } = useScrollDirection()
@@ -58,14 +57,11 @@ const titleTopic = computed(() => {
   return 'Sales'
 })
 const isModalOpen = ref(false)
-const selectedListing = ref<Listing | null>(null)
+const selectedListing = ref<any | null>(null)
 
-const openModal = (item: Listing) => {
+const openModal = (item: any) => {
   selectedListing.value = {
     ...item,
-    id: (item as any)._id || item.id, // Ensure ID exists for key tracking
-    images: item.images, // FIX: Was mapped to item.image (which was undefined)
-    videoUrl: item.video,
     serverUrl
   } as any
   isModalOpen.value = true
@@ -77,7 +73,7 @@ const closeModal = () => {
 }
 const fetchData = async () => {
   try {
-    const _res = await viewOrders()
+    const _res = await viewOrders({})
     items.value = _res.data.data
     console.log('Fetched Orders:', _res)
   } catch (error) {

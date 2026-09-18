@@ -1,23 +1,9 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { IconFullscreen } from '@/util/icons'
-export interface ListingDetail {
-  id: number
-  title: string
-  price: number
-  location?: string
-  type: 'car' | 'land'
-  image?: { profile: string; detail: string[] }
-  images?: { profile: string; detail: string[] }
-  video?: string
-  videoUrl?: string
-  description: string
-  specs?: { label: string; value: string | number }[]
-}
-
 const props = defineProps<{
   isOpen: boolean
-  item: ListingDetail | null
+  item: any
 }>()
 
 const emit = defineEmits<{
@@ -41,7 +27,7 @@ const profileImage = computed(() => {
 })
 
 const currentVideoUrl = computed(() => {
-  return props.item?.videoUrl || props.item?.video || ''
+  return props.item?.video || ''
 })
 
 const activeImageUrl = computed(() => {

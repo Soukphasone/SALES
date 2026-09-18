@@ -1,11 +1,11 @@
 {
-  "name": "tailadmin-vue-free",
+  "name": "sales-recommendation-website",
   "version": "1.0.3",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
+    "build": "vite build",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
