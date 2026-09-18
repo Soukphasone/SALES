@@ -1,23 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import ECommerceView from '@/views/Dashboard/ECommerceView.vue'
-import DetailView from '@/views/Dashboard/Detail.vue'
+import Dashboard from '@/views/Dashboard/Dashboard.vue'
 import AdminManager from '@/components/Admin/AdminManager.vue'
 
 const routes = [
   {
     path: '/:type(car|land|all)',
     name: 'TypePage',
-    component: ECommerceView,
+    component: Dashboard,
     meta: {
       title: 'Sales Dashboard'
-    }
-  },
-  {
-    path: '/detail',
-    name: 'detail',
-    component: DetailView,
-    meta: {
-      title: 'Detail'
     }
   },
   {
