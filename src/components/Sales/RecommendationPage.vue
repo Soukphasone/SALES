@@ -7,55 +7,71 @@ import { useScrollDirection } from '@/composables/useScrollDirection'
 import DetailView from './DetailView.vue'
 import { viewOrders } from '@/services/service/ManageAPI'
 import { formatNumber } from '@/services/service/Format'
+
 const { t } = useI18n()
 const route = useRoute()
-const type = route.params.type as string
-console.log('Path Name', type)
+
+// 1. เปลี่ยน type เป็น Computed เพื่อให้ Reactive ตาม URL Parameter
+const type = computed(() => (route.params.type as string) || 'all')
+
 const items = ref<any[]>([])
-const serverUrl = import.meta.env.VITE_APP_SERVER
-const filter = ref<'all' | 'land' | 'car'>((type as 'all' | 'land' | 'car') || 'all')
+const serverUrl = import.meta.env.VITE_APP_SERVER || ''
+const filter = ref<'all' | 'land' | 'car'>('all')
 const { showHeader } = useScrollDirection()
+
+// Sync filter ค่าเริ่มต้น และปรับเปลี่ยนเมื่อ type ใน URL เปลี่ยน
+watch(
+  type,
+  (newType) => {
+    if (newType === 'car' || newType === 'land' || newType === 'all') {
+      filter.value = newType
+    } else {
+      filter.value = 'all'
+    }
+  },
+  { immediate: true }
+)
 
 // --- Load More State & Logic ---
 const ITEMS_PER_PAGE = 3
 const visibleCount = ref<number>(ITEMS_PER_PAGE)
 const isLoading = ref<boolean>(false)
 
-// Reset pagination when switching filter tabs
+// Reset pagination เมื่อมีการเปลี่ยน filter
 watch(filter, () => {
   visibleCount.value = ITEMS_PER_PAGE
 })
 
-// Filter items first
+// Filter items ตามประเภทที่เลือก
 const filteredItems = computed(() => {
   if (filter.value === 'all') return items.value
   return items.value.filter((i) => i.type === filter.value)
 })
 
-// Display only visible portion of items
+// ตัดแบ่งจำนวนรายการแสดงผล
 const displayedItems = computed(() => {
   return filteredItems.value.slice(0, visibleCount.value)
 })
 
-// Check if more items are available
+// เช็กว่ามีรายการเหลือให้กด Load More หรือไม่
 const hasMore = computed(() => {
   return visibleCount.value < filteredItems.value.length
 })
 
-// Handle Load More click
 const handleLoadMore = () => {
   isLoading.value = true
   setTimeout(() => {
     visibleCount.value += ITEMS_PER_PAGE
     isLoading.value = false
-  }, 500) // Simulated loading delay
+  }, 500)
 }
 
 const titleTopic = computed(() => {
-  if (type === 'land') return 'Sales Land'
-  if (type === 'car') return 'salesOldcar'
+  if (type.value === 'land') return 'Sales Land'
+  if (type.value === 'car') return 'salesOldcar'
   return 'Sales'
 })
+
 const isModalOpen = ref(false)
 const selectedListing = ref<any | null>(null)
 
@@ -63,7 +79,7 @@ const openModal = (item: any) => {
   selectedListing.value = {
     ...item,
     serverUrl
-  } as any
+  }
   isModalOpen.value = true
 }
 
@@ -71,15 +87,16 @@ const closeModal = () => {
   isModalOpen.value = false
   selectedListing.value = null
 }
+
 const fetchData = async () => {
   try {
     const _res = await viewOrders({})
-    items.value = _res.data.data
-    console.log('Fetched Orders:', _res)
+    items.value = _res.data?.data || []
   } catch (error) {
     console.error('Error fetching orders:', error)
   }
 }
+
 onMounted(() => {
   fetchData()
 })
@@ -87,7 +104,7 @@ onMounted(() => {
 
 <template>
   <div class="max-w-7xl mx-auto font-lao p-4 pt-0">
-    <!-- Auto-Hiding Fixed Header with Smooth Transition -->
+    <!-- Auto-Hiding Fixed Header -->
     <header
       :class="[
         'fixed top-0 left-0 right-0 z-50 bg-gray-50 backdrop-blur-sm border-b border-gray-100 shadow-sm transition-transform duration-300 ease-in-out px-6 py-4',
@@ -99,8 +116,7 @@ onMounted(() => {
           <h1 class="text-xl font-bold text-slate-800">{{ t(titleTopic) }}</h1>
           <changeLanguage />
         </div>
-        <div class="flex justify-between items-center">
-          <!-- <h1 class="text-3xl font-bold text-slate-800">{{ titleTopic }}</h1> -->
+        <div class="flex justify-center items-center">
           <div v-if="type === 'all'" class="flex gap-2 bg-slate-100 p-1 sm:p-1.5 rounded-lg">
             <button
               @click="filter = 'all'"
@@ -144,29 +160,30 @@ onMounted(() => {
         :key="item.id"
         class="border rounded-xl overflow-hidden hover:shadow-lg transition cursor-pointer"
       >
+        <!-- 2. ใช้ Optional Chaining ป้องกัน App ล่มหากไม่มี Object images -->
         <img
-          :src="serverUrl + item.images.profile"
+          :src="item.images?.profile ? serverUrl + item.images.profile : ''"
           :alt="item.title"
-          class="w-full h-48 object-cover"
+          class="w-full h-48 object-cover bg-gray-100"
         />
         <div class="p-4">
           <h2 class="text-xl font-semibold mt-2">{{ item.title }}</h2>
 
           <p v-if="item.cars" class="text-gray-500 text-sm">
-            {{ `${item.cars.make} ${item.cars.model} ${item.cars.year}` }}
+            {{ `${item.cars.make || ''} ${item.cars.model || ''} ${item.cars.year || ''}` }}
           </p>
           <p v-if="item.lands" class="text-gray-500 text-sm">
-            {{ `${item.lands.village}, ${item.lands.district}, ${item.lands.province}` }}
+            {{ `${item.lands.village || ''}, ${item.lands.district || ''}, ${item.lands.province || ''}` }}
           </p>
 
           <p class="text-gray-400 text-sm flex items-center gap-1 mt-1">
-            👁️ {{ item.views }} views
+            👁️ {{ item.views || 0 }} views
           </p>
 
           <div class="flex justify-between items-center mt-4">
             <span class="text-2xl font-bold text-slate-900">
-              {{ formatNumber(item.price) }} {{ item.currency }}</span
-            >
+              {{ formatNumber(item.price) }} {{ item.currency }}
+            </span>
 
             <button
               @click="openModal(item)"
